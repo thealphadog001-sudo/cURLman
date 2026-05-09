@@ -13,11 +13,11 @@ A blazing fast, terminal-based API client heavily inspired by Postman. Built wit
 
 ## Prerequisites
 
-Before building, ensure you have Rust and Cargo installed. Additionally, since this project relies on `libcurl`, you may need to install standard development libraries for curl and openssl depending on your OS:
+Before building, ensure you have Rust and Cargo installed (Rust 1.88.0+ / Nightly is recommended for the 2024 edition). Additionally, since this project relies on `libcurl`, you may need to install standard development libraries for curl and openssl depending on your OS:
 
 - **Ubuntu/Debian:** `sudo apt install libcurl4-openssl-dev libssl-dev`
 - **macOS:** `brew install curl openssl` (often already available via Xcode Command Line Tools)
-- **Windows:** Vcpkg or standard Windows dev tools.
+- **Windows:** See the [Windows Installation Guide](#windows-installation-guide) below.
 
 ## Installation
 
@@ -35,6 +35,27 @@ Alternatively, just build and run it locally:
 cargo build --release
 ./target/release/app
 ```
+
+### Windows Installation Guide
+
+Building `curl` (and `openssl-sys`) from source on Windows can be tricky. The easiest way to get it working is by using `vcpkg`.
+
+1. Install [vcpkg](https://github.com/microsoft/vcpkg#quick-start-windows).
+2. Install `curl` and `openssl` via `vcpkg` for a 64-bit Windows target:
+   ```powershell
+   vcpkg install curl:x64-windows
+   vcpkg install openssl:x64-windows
+   ```
+3. Integrate `vcpkg` with your build system and point `cargo` to the installation by setting the following environment variables (adjust `C:\vcpkg` to your actual installation path):
+   ```powershell
+   $env:VCPKG_ROOT="C:\vcpkg"
+   $env:RUSTFLAGS="-Ctarget-feature=+crt-static"
+   ```
+4. Now you can build the application normally:
+   ```powershell
+   cargo build --release
+   .\target\release\app.exe
+   ```
 
 ## Usage Guidelines
 
